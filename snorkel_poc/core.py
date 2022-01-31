@@ -1,5 +1,9 @@
 import numpy as np
+import os
+from os.path import join
+
 import pandas as pd
+import ray
 
 from snorkel.labeling import labeling_function, PandasLFApplier
 from snorkel.labeling.model import LabelModel
@@ -11,6 +15,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
 import dmnet.util as u
+
+MODEL_LOC = "gs://jdh-bucket/projects/snorkel_pos/rf.mdl"
 
 class SnorkelPOC():
 
@@ -39,7 +45,7 @@ class SnorkelPOC():
         X, y = self.dmatrices['for_label_making'].drop('y', axis=1), self.dmatrices['for_label_making']['y']
         X = X.fillna(0)
         mdl.fit(X,y)
-        u.pickle_dump(mdl, "gs://jdh-bucket/projects/snorkel_pos/rf.mdl")
+        u.pickle_dump(mdl, MODEL_LOC)
         return mdl
 
     def get_std_scaler(self) -> StandardScaler:
@@ -55,23 +61,13 @@ class SnorkelPOC():
         X = self.std_scaler.transform(X)
         mdl.fit(X,y)
         return mdl
-    
-    
 
-    @labeling_function()
-    def logreg_output(self, x):
-        x = self.std_scaler.transform(x.fillna(0))
-        return self.logreg.predict(x)
-
-@preprocessor(memoize=True)
-def rf_output(x):
-    rf = u.pickle_load("gs://jdh-bucket/projects/snorkel_pos/rf.mdl")
-    x['rf_prob'] = rf.predict_proba(x.fillna(0).values.reshape(1, -1))[:, 1]
-    return x
-
-@labeling_function(pre=[rf_output])
-def rf_prediction(x):
-    return 1 if x['rf_prob'] > 0.7 else 0
+    def label_function(self):
+        X = self.dmatrices['for_testing'].drop(['y'], axis=1)
+        rf_preds = pd.Series(self.rf.predict(X.fillna(0)))
+        cltv_flag = pd.Series((X['cltv'] > 0.3) * 1).astype(int)
+        lbl_mtrx = pd.concat([rf_preds, cltv_flag], axis=1).to_numpy()
+        return lbl_mtrx
 
 @labeling_function()
 def cltv_bk_pt(x):
@@ -80,9 +76,4 @@ def cltv_bk_pt(x):
 
 if __name__ == "__main__":
     poc = SnorkelPOC(campaign='42.prod')
-    lfs = [rf_prediction] #, poc.logreg_output]
-    aplr = PandasLFApplier(lfs=lfs)
-    L_train = aplr.apply(df=poc.dmatrices['for_testing'].drop(['y'], axis=1))
-
-    print (L_train)
-
+    u.pickle_dump(poc.label_function(), "gs://jdh-bucket/projects/snorkel_pos/test_lbl.fnc")
