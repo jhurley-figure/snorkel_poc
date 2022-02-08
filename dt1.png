@@ -1,0 +1,34 @@
+digraph Tree {
+node [shape=box, style="filled, rounded", color="black", fontname="helvetica"] ;
+edge [fontname="helvetica"] ;
+rankdir=LR ;
+0 [label=<premier_v1_2_fip8120 &le; 0.5<br/>gini = 0.5<br/>samples = 100.0%<br/>value = [0.5, 0.5]<br/>class = y<SUB>1</SUB>>, fillcolor="#ffffff"] ;
+1 [label=<premier_v1_2_iqt9526 &le; 0.5<br/>gini = 0.496<br/>samples = 78.9%<br/>value = [0.547, 0.453]<br/>class = y<SUB>0</SUB>>, fillcolor="#fbe9dd"] ;
+0 -> 1 [labeldistance=2.5, labelangle=-45, headlabel="True"] ;
+2 [label=<premier_v1_2_iqb9410 &le; 1.5<br/>gini = 0.485<br/>samples = 59.2%<br/>value = [0.588, 0.412]<br/>class = y<SUB>0</SUB>>, fillcolor="#f7d9c4"] ;
+1 -> 2 ;
+3 [label=<gini = 0.473<br/>samples = 44.6%<br/>value = [0.615, 0.385]<br/>class = y<SUB>0</SUB>>, fillcolor="#f5d0b5"] ;
+2 -> 3 ;
+4 [label=<gini = 0.499<br/>samples = 14.6%<br/>value = [0.517, 0.483]<br/>class = y<SUB>0</SUB>>, fillcolor="#fdf7f2"] ;
+2 -> 4 ;
+5 [label=<ficeclv9_score &le; 691.5<br/>gini = 0.496<br/>samples = 19.8%<br/>value = [0.453, 0.547]<br/>class = y<SUB>1</SUB>>, fillcolor="#ddeefb"] ;
+1 -> 5 ;
+6 [label=<gini = 0.459<br/>samples = 3.6%<br/>value = [0.357, 0.643]<br/>class = y<SUB>1</SUB>>, fillcolor="#a7d3f3"] ;
+5 -> 6 ;
+7 [label=<gini = 0.499<br/>samples = 16.2%<br/>value = [0.481, 0.519]<br/>class = y<SUB>1</SUB>>, fillcolor="#f1f8fd"] ;
+5 -> 7 ;
+8 [label=<premier_v1_2_iqb9410 &le; 1.5<br/>gini = 0.47<br/>samples = 21.1%<br/>value = [0.377, 0.623]<br/>class = y<SUB>1</SUB>>, fillcolor="#b1d8f5"] ;
+0 -> 8 [labeldistance=2.5, labelangle=45, headlabel="False"] ;
+9 [label=<premier_v1_2_fip5020 &le; 6829.5<br/>gini = 0.492<br/>samples = 14.0%<br/>value = [0.436, 0.564]<br/>class = y<SUB>1</SUB>>, fillcolor="#d2e9f9"] ;
+8 -> 9 ;
+10 [label=<gini = 0.499<br/>samples = 10.7%<br/>value = [0.481, 0.519]<br/>class = y<SUB>1</SUB>>, fillcolor="#f1f8fd"] ;
+9 -> 10 ;
+11 [label=<gini = 0.446<br/>samples = 3.4%<br/>value = [0.335, 0.665]<br/>class = y<SUB>1</SUB>>, fillcolor="#9dcef2"] ;
+9 -> 11 ;
+12 [label=<premier_v1_2_fip5020 &le; 5716.5<br/>gini = 0.417<br/>samples = 7.0%<br/>value = [0.297, 0.703]<br/>class = y<SUB>1</SUB>>, fillcolor="#8dc6f0"] ;
+8 -> 12 ;
+13 [label=<gini = 0.447<br/>samples = 5.4%<br/>value = [0.337, 0.663]<br/>class = y<SUB>1</SUB>>, fillcolor="#9ecff2"] ;
+12 -> 13 ;
+14 [label=<gini = 0.335<br/>samples = 1.6%<br/>value = [0.213, 0.787]<br/>class = y<SUB>1</SUB>>, fillcolor="#6eb7ec"] ;
+12 -> 14 ;
+}
